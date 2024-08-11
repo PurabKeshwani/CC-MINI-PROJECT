@@ -4,6 +4,7 @@ import fs from "fs";
 import { OUTPUT_DIR } from "./constants";
 
 const resolutions = [
+  { resolution: "128x72", bitrate: "100k" },
   { resolution: "256x144", bitrate: "400k" },
   { resolution: "640x360", bitrate: "800k" },
   { resolution: "854x480", bitrate: "1200k" },
@@ -22,29 +23,6 @@ export function transCodeVideo(inputPath: string): Promise<
   }[]
 > {
   return new Promise((resolve, reject) => {
-    ffmpeg.ffprobe(inputPath, (err, data) => {
-      const resolution =
-        data.streams[0].coded_width + "x" + data.streams[0].coded_height;
-      const bitrate = data.streams[0].bit_rate;
-
-      console.log(
-        "Input video resolution: ",
-        resolution,
-        "Input video bitrate: ",
-        bitrate
-      );
-
-      // remove all the resolutions that are higher than the input video
-      resolutions.forEach((item, index) => {
-        const itemBitrate = parseInt(item.bitrate.replace("k", ""));
-        if (bitrate && itemBitrate > parseInt(bitrate)) {
-          resolutions.splice(index, 1);
-        }
-      });
-    });
-
-    return console.log("Resolutions to transcode: ", resolutions);
-
     if (!fs.existsSync(inputPath)) {
       reject(new Error("Input file does not exist"));
       return;
@@ -63,8 +41,13 @@ export function transCodeVideo(inputPath: string): Promise<
     }[] = [];
     const masterPlaylist = path.join(OUTPUT_DIR, "index.m3u8");
 
+    let virResolutions: {
+      resolution: string;
+      bitrate: string;
+    }[] = [];
+
     const createMasterPlaylist = () => {
-      const playlistContent = resolutions
+      const playlistContent = virResolutions
         .map(
           (item) =>
             `#EXT-X-STREAM-INF:BANDWIDTH=${item.bitrate},RESOLUTION=${item.resolution}\n${item.resolution}/index.m3u8`
@@ -87,24 +70,33 @@ export function transCodeVideo(inputPath: string): Promise<
       }
 
       ffmpeg(inputPath)
-        .output(path.join(resolutionOutputDir, "index.m3u8"))
-        .outputOptions([
-          "-codec:v libx264",
-          "-codec:a aac",
-          "-b:v " + item.bitrate,
-          "-b:a 128k",
-          "-hls_time 5",
-          "-hls_list_size 0",
-          "-hls_segment_filename " +
-            path.join(resolutionOutputDir, "segment-%03d.ts"),
-        ])
+      .output(path.join(resolutionOutputDir, "index.m3u8"))
+      .outputOptions([
+        "-codec:v libx264",
+        "-preset veryslow",
+        "-codec:a aac",
+        "-b:v " + item.bitrate,
+        "-b:a 128k",
+        "-hls_time 5",
+        "-hls_list_size 0",
+        "-hls_segment_filename " +
+          path.join(resolutionOutputDir, "segment-%03d.ts"),
+        "-threads 1",
+        "-max_interleave_delta 100M",
+        "-threads 1",
+        "-cpu-used 1",
+        "-preset ultrafast",
+        "-tune film",
+        "-threads 1",
+        "-max_muxing_queue_size 100",
+      ])
         .on("end", () => {
           console.log(`Transcoding finished for ${item.resolution}`);
           outputPaths.push({
             path: resolutionOutputDir,
             resolution: item.resolution,
           });
-          if (outputPaths.length === resolutions.length) {
+          if (outputPaths.length === virResolutions.length) {
             createMasterPlaylist();
             resolve(outputPaths);
           }
@@ -116,6 +108,38 @@ export function transCodeVideo(inputPath: string): Promise<
         .run();
     };
 
-    resolutions.forEach(processResolution);
+    ffmpeg.ffprobe(inputPath, (err, data) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      const resolution = {
+        width: data.streams[0]?.width,
+        height: data.streams[0]?.height,
+      };
+
+      // Check if width and height are defined
+      if (resolution.width === undefined || resolution.height === undefined) {
+        reject(new Error("Could not determine video resolution"));
+        return;
+      }
+
+      console.log("Input video resolution: ", resolution);
+
+      // Filter resolutions based on input video resolution
+      virResolutions = resolutions.filter((item) => {
+        const [resWidth, resHeight] = item.resolution.split("x").map(Number);
+        return (
+          (resolution.width as any) >= resWidth &&
+          (resolution.height as any) >= resHeight
+        );
+      });
+
+      console.log("VirResolutions to transcode: ", virResolutions);
+
+      // Process only filtered resolutions
+      virResolutions.forEach(processResolution);
+    });
   });
 }

@@ -12,7 +12,7 @@ export async function uploadObject(
   if (!fs.existsSync(pathToFile)) {
     throw new Error(`File not found: ${pathToFile}`);
   }
-  
+
   const fileStream = fs.createReadStream(pathToFile);
   const fileName = path.basename(pathToFile);
 
@@ -24,6 +24,7 @@ export async function uploadObject(
 
   const command = new PutObjectCommand(uploadParams);
   await s3.send(command);
+  console.log(`Uploaded ${fileName}`);
 }
 
 export async function uploadDirectory(id: string) {
