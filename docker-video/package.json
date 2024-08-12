@@ -4,8 +4,11 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node src/index.ts",
+    "start:transcode": "PROCESS=transcode ts-node src/index.ts",
+    "start:transcode:upload": "PROCESS=transcode&upload ts-node src/index.ts",
+    "start:upload": "PROCESS=upload ts-node src/index.ts",
     "start:docker": "docker run -p 3000:3000 docker-video:latest",
-    "build": "docker build -t docker-video:latest ."
+    "build": "docker build -t docker-video:latest . -f Dockerfile"
   },
   "keywords": [],
   "author": "",

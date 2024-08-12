@@ -1,9 +1,12 @@
 import { Router } from "express";
+import { handleUploadVideo } from "../controllers/video";
+import upload, { handleMulterErrors } from "../lib/multerConfig";
+import { checkToken } from "../middleware";
 
-const router= Router();
+const router = Router();
 
-router.get("/", (req, res) => {
-    res.send("Hello, World!");
-});
+router.use(checkToken);
+
+router.post("/", upload.single("video"), handleMulterErrors, handleUploadVideo);
 
 export default router;

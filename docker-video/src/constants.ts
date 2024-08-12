@@ -9,3 +9,4 @@ export const AWS_BUCKET_NAME = process.env.AWS_BUCKET_NAME || "video-bucket";
 export const VIDEO_FILE_PATH = process.env.VIDEO_FILE_PATH || "video.mp4";
 export const OUTPUT_DIR = process.env.OUTPUT_DIR || "output";
 export const OUTPUT_NAME= process.env.OUTPUT_NAME;
+export const PROCESS = process.env.PROCESS;
