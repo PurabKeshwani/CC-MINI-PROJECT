@@ -9,6 +9,8 @@ import {
 } from "../lib/constants";
 import prisma from "../lib/prisma";
 import { updateVideo } from "../schema/video";
+import { deleteFolder, s3Client } from "../lib/s3Client";
+import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 export async function handleGetVideos(req: Request, res: Response) {
   const videos = await prisma.video.findMany();
@@ -89,6 +91,7 @@ export async function handleUploadVideo(req: Request, res: Response) {
   const params = {
     command: "upload",
     payload: {
+      videoID: video.id,
       videoPath: UPLOADS_DIR + "/" + fileNameComputed,
       accessKey: AWS_ACCESS_KEY_ID,
       secretKey: AWS_SECRET_ACCESS_KEY,
@@ -137,4 +140,32 @@ export async function handleUpdateVideo(req: Request, res: Response) {
   res
     .status(200)
     .json({ message: "Video updated", updatedAt: updatedVid.updatedAt });
+}
+
+export async function handleDeleteVideo(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const video = await prisma.video.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!video) {
+    return res.status(404).json({ message: "Video not found" });
+  }
+
+  const deleteRes= await deleteFolder(video.key);
+
+  if (!deleteRes) {
+    return res.status(500).json({ message: "Failed to delete video" });
+  }
+
+  await prisma.video.delete({
+    where: {
+      id,
+    },
+  });
+
+  res.status(200).json({ message: "Video deleted" });
 }

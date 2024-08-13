@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import { getVideo, updateVideo } from "../lib/video";
-import { useParams } from "react-router-dom";
+import { deleteVideo, getVideo, updateVideo } from "../lib/video";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Video, VideoVisibility } from "../types/video";
 import { useCookies } from "react-cookie";
 import LoginAlert from "./LoginAlert";
@@ -69,7 +69,9 @@ function StudioVideo({
   setEditValues: React.Dispatch<React.SetStateAction<Video>>;
   setVideo: React.Dispatch<React.SetStateAction<Video>>;
 }) {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [deteleLoading, setDeleteLoading] = useState(false);
   const setVideos = useSetRecoilState(videosAtom);
 
   const handleEditVideo = useCallback(() => {
@@ -110,6 +112,26 @@ function StudioVideo({
     );
   }, [editVideo, loading, setEditValues, setVideo, setVideos, video]);
 
+  const handeleDeleteVideo = useCallback(() => {
+    if (loading)
+      return toast.error("Please wait for the current operation to complete");
+
+    setDeleteLoading(true);
+    toast.promise(
+      deleteVideo(video.id)
+        .then(() => {
+          setVideos((prev) => prev.filter((vid) => vid.id !== video.id));
+          navigate("/studio");
+        })
+        .finally(() => setDeleteLoading(false)),
+      {
+        loading: "Deleting video...",
+        success: "Video deleted successfully",
+        error: "Failed to delete video",
+      }
+    );
+  }, [loading, navigate, setVideos, video]);
+
   useEffect(() => {
     function handleSave(e: KeyboardEvent) {
       if (e.ctrlKey && e.key === "s") {
@@ -128,6 +150,16 @@ function StudioVideo({
         <h1 className="text-xl font-extrabold">
           Last Updated: {editVideo.updatedAt.toLocaleString()}
         </h1>
+      </div>{" "}
+      <div className="text-2xl font-bold mb-4">
+        Media URL:
+        <Link
+          className="text-lg font-bold ml-3 underline"
+          target="_blank"
+          to={editVideo.url}
+        >
+          {editVideo.url}
+        </Link>
       </div>
       <label className="w-full flex items-center m-3">
         <p className="text-2xl font-bold">Title:</p>
@@ -155,7 +187,6 @@ function StudioVideo({
           }
         />
       </label>
-
       <label className="w-full flex items-center m-3">
         <p className="text-2xl font-bold mr-3">Visibility:</p>
         <select
@@ -175,7 +206,6 @@ function StudioVideo({
           ))}
         </select>
       </label>
-
       <div className="flex space-x-5 mx-auto">
         <button
           onClick={handleEditVideo}
@@ -197,8 +227,9 @@ function StudioVideo({
           </svg>
         </button>
         <button
+          onClick={handeleDeleteVideo}
           className={`btn btn-error mt-10 w-[200px] mx-auto ${
-            loading ? "animate-pulse" : ""
+            deteleLoading ? "animate-pulse" : ""
           }`}
         >
           Delete

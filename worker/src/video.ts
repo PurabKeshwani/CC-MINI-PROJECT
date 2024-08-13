@@ -2,7 +2,15 @@ import exec from "child_process";
 import { JobCommand } from "./typs";
 
 export function uploadVideo({
-  payload: { accessKey, secretKey, region, bucketName, outputName, videoPath },
+  payload: {
+    accessKey,
+    secretKey,
+    region,
+    bucketName,
+    outputName,
+    videoPath,
+    videoID,
+  },
 }: JobCommand) {
   const execCommand = `
     docker run --rm --cpus=1 \
@@ -14,6 +22,7 @@ export function uploadVideo({
         -e VIDEO_FILE_PATH=/app/videos/video.mp4 \
         -e OUTPUT_NAME='${outputName}' \
         -v "${videoPath}":/app/videos/video.mp4 \
+        --name ${"vidwave-" + videoID} \
         docker-video:latest
     `;
   console.log(execCommand);

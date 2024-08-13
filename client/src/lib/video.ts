@@ -48,3 +48,10 @@ export async function updateVideo(id: string, video: Partial<Video>) {
   });
   return res.data;
 }
+
+export async function deleteVideo(id: string) {
+  const res = await axios.delete(BASE_URL + "/api/video/" + id, {
+    withCredentials: true,
+  });
+  return res.data;
+}

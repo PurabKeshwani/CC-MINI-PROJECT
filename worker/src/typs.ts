@@ -11,6 +11,7 @@ export const jobCommand = z.object({
     region: z.string(),
     outputName: z.string().optional(),
     bucketName: z.string(),
+    videoID: z.string(),
   }),
 });
 
