@@ -8,10 +8,11 @@ import {
 } from "react";
 import { useCookies } from "react-cookie";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { uploadFIle } from "../lib/video";
 
 export default function UploadBox() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [{ token }] = useCookies(["token"]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +60,10 @@ export default function UploadBox() {
     const promiseFunction = uploadFIle(file).finally(() => setLoading(false));
     toast.promise(promiseFunction, {
       loading: "Uploading...",
-      success: "File is being processed",
+      success: (data) => {
+        navigate(`/studio/${data.id}`);
+        return "File uploaded successfully";
+      },
       error: (e) => {
         if (e.response.data.message) return e.response.data.message;
         console.error(e);

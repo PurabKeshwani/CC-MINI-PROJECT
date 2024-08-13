@@ -18,6 +18,9 @@ export default function Navbar() {
           <Link to={"/"} className="mr-3 hidden md:block">
             Home
           </Link>
+          <Link to={"/studio"} className="mr-3 hidden md:block">
+            Studio
+          </Link>
           <Link to={"/upload"} className="mr-3 hidden md:block">
             Upload
           </Link>

@@ -16,7 +16,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 app.use("/", routes);
 
 app.listen(PORT, async () => {
@@ -26,3 +26,4 @@ app.listen(PORT, async () => {
   console.log("Connected to redis");
   console.log(`app is running on port ${PORT}`);
 });
+

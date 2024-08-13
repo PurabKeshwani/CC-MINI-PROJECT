@@ -1,6 +1,5 @@
 import VideoJS from "../components/VideoPlayer";
 
-// Define types for VideoJS options
 interface VideoJsOptions {
   autoplay: boolean;
   controls: boolean;

@@ -14,7 +14,7 @@ export default function App() {
       <Navbar />
       <Toaster />
       <main
-        className="bg-white h-[100svh] w-screen overflow-y-scroll"
+        className="bg-gray-800 h-[100svh] w-screen overflow-y-scroll text-white"
         style={{ paddingTop: `${navHeight}px` }}
       >
         <Pages />

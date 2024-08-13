@@ -20,8 +20,6 @@ model Video {
   title       String    @default("")
   description String    @default("")
   key         String    @default("")
-  tags        String[]  @default([])
-  duration    Int       @default(0)
   likes       Int       @default(0)
   dislikes    Int       @default(0)
   views       Int       @default(0)
