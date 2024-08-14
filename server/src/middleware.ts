@@ -16,12 +16,7 @@ export async function checkToken(
     });
   }
   try {
-    const { username } = decodeToken(token);
-    const userExists = await prisma.user.findFirst({
-      where: {
-        username,
-      },
-    });
+    const userExists = await validateToken(token);
     if (!userExists) {
       return resp.status(401).send({
         message: "Unauthorized Access, Please login to continue",
@@ -35,5 +30,22 @@ export async function checkToken(
       message: "Unauthorized Access, Please login to continue",
       status: "failed",
     });
+  }
+}
+
+export async function validateToken(token: string) {
+  try {
+    const { username } = decodeToken(token);
+    const userExists = await prisma.user.findFirst({
+      where: {
+        username,
+      },
+    });
+    if (!userExists) {
+      return null;
+    }
+    return userExists;
+  } catch (error) {
+    return null;
   }
 }

@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { handleLoginUser, handleRegisterUser } from "../lib/auth";
+import { handleRegisterUser } from "../lib/auth";
 
 export default function Register() {
   const navigate= useNavigate();

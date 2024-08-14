@@ -33,61 +33,63 @@ function Studio() {
         <div className="w-20 min-w-28">Uploaded at</div>
         <div className="w-20 min-w-28">Updated at</div>
       </div>
-      {videos.map((video, index) => {
-        return (
-          <Link
-            to={`/studio/${video.id}`}
-            key={index}
-            className={`flex overflow-x-auto space-x-16 w-full p-5 py-9 border-b-2 border-gray-500 hover:bg-gray-700 ${
-              index === 0 ? "border-t-2" : ""
-            }`}
-          >
-            <p className="w-12 whitespace-nowrap overflow-hidden">
-              {index + 1}
-            </p>
-            <p
-              className="w-52 whitespace-nowrap overflow-hidden"
-              title={video.title ? video.title : undefined}
+      {videos
+        .filter((video) => video.isAuthor)
+        .map((video, index) => {
+          return (
+            <Link
+              to={`/studio/${video.id}`}
+              key={index}
+              className={`flex overflow-x-auto space-x-16 w-full p-5 py-9 border-b-2 border-gray-500 hover:bg-gray-700 ${
+                index === 0 ? "border-t-2" : ""
+              }`}
             >
-              {video.title
-                ? video.title
-                : "Enter your description to show it here"}
-            </p>
-            <p
-              className="w-52 whitespace-nowrap overflow-hidden"
-              title={video.description ? video.description : undefined}
-            >
-              {video.description
-                ? video.description
-                : "Enter your description to show it here"}
-            </p>
-            <p className="w-16 whitespace-nowrap overflow-hidden">
-              {video.visibility}
-            </p>
-            <p className="w-10 whitespace-nowrap overflow-hidden">
-              {video.views}
-            </p>
-            <p className="w-10 whitespace-nowrap overflow-hidden">
-              {video.likes}
-            </p>
-            <p className="w-10 whitespace-nowrap overflow-hidden">
-              {video.dislikes}
-            </p>
-            <p
-              className="w-28 whitespace-nowrap overflow-hidden"
-              title={video.uploadedAt.toLocaleString()}
-            >
-              {video.uploadedAt.toLocaleDateString()}
-            </p>
-            <p
-              className="w-28 whitespace-nowrap overflow-hidden"
-              title={video.updatedAt.toLocaleString()}
-            >
-              {video.updatedAt.toLocaleDateString()}
-            </p>
-          </Link>
-        );
-      })}
+              <p className="w-12 whitespace-nowrap overflow-hidden">
+                {index + 1}
+              </p>
+              <p
+                className="w-52 whitespace-nowrap overflow-hidden"
+                title={video.title ? video.title : undefined}
+              >
+                {video.title
+                  ? video.title
+                  : "Enter your description to show it here"}
+              </p>
+              <p
+                className="w-52 whitespace-nowrap overflow-hidden"
+                title={video.description ? video.description : undefined}
+              >
+                {video.description
+                  ? video.description
+                  : "Enter your description to show it here"}
+              </p>
+              <p className="w-16 whitespace-nowrap overflow-hidden">
+                {video.visibility}
+              </p>
+              <p className="w-10 whitespace-nowrap overflow-hidden">
+                {video.views}
+              </p>
+              <p className="w-10 whitespace-nowrap overflow-hidden">
+                {video.likes}
+              </p>
+              <p className="w-10 whitespace-nowrap overflow-hidden">
+                {video.dislikes}
+              </p>
+              <p
+                className="w-28 whitespace-nowrap overflow-hidden"
+                title={video.uploadedAt.toLocaleString()}
+              >
+                {video.uploadedAt.toLocaleDateString()}
+              </p>
+              <p
+                className="w-28 whitespace-nowrap overflow-hidden"
+                title={video.updatedAt.toLocaleString()}
+              >
+                {video.updatedAt.toLocaleDateString()}
+              </p>
+            </Link>
+          );
+        })}
     </div>
   );
 }

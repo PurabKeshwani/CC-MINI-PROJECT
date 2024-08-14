@@ -8,6 +8,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { videosAtom } from "../atom/video";
 import toast from "react-hot-toast";
 import Loader from "./Loader";
+import AuthorAlert from "./AuthorAlert";
 
 export default function StudioVideoCX() {
   const [{ token }] = useCookies(["token"]);
@@ -43,16 +44,20 @@ export default function StudioVideoCX() {
       <div className="w-full h-full flex items-center justify-center">
         <Loader className="w-10 h-10" />
       </div>
-    ) : video && editValues ? (
-      <StudioVideo
-        video={video}
-        editVideo={editValues}
-        setEditValues={
-          setEditValues as React.Dispatch<React.SetStateAction<Video>>
-        }
-        setVideo={setVideo as React.Dispatch<React.SetStateAction<Video>>}
-      />
-    ) : null
+    ) : video && video.isAuthor ? (
+      editValues ? (
+        <StudioVideo
+          video={video}
+          editVideo={editValues}
+          setEditValues={
+            setEditValues as React.Dispatch<React.SetStateAction<Video>>
+          }
+          setVideo={setVideo as React.Dispatch<React.SetStateAction<Video>>}
+        />
+      ) : null
+    ) : (
+      <AuthorAlert />
+    )
   ) : (
     <LoginAlert />
   );

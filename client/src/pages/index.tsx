@@ -4,11 +4,13 @@ import auth from "./Auth";
 import Upload from "./Upload";
 import StudioVideo from "./StudioVideo";
 import Studio from "./Studio";
+import Video from "./Video";
 
 export default function index() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/:id" element={<Video />} />
       <Route path="/login" element={auth("login")} />
       <Route path="/register" element={auth("register")} />
       <Route path="/upload" element={<Upload />} />

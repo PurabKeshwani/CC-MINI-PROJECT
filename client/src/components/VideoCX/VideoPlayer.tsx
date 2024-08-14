@@ -47,7 +47,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   }, []);
 
   return (
-    <div data-vjs-player style={{ width: "600px" }}>
+    <div data-vjs-player className="min-w-full min-h-full">
       <div ref={videoRef} />
     </div>
   );

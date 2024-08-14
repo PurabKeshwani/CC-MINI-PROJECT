@@ -17,6 +17,7 @@ export const validateVideo = z.object({
   visibility: videoVisibility,
   uploadedAt: z.string().transform((val) => new Date(val)),
   updatedAt: z.string().transform((val) => new Date(val)),
+  isAuthor: z.boolean(),
 });
 
 export type Video = z.infer<typeof validateVideo>;

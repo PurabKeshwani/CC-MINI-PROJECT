@@ -6,7 +6,7 @@ export default function Navbar() {
   const [{ token }, _, removeCookies] = useCookies(["token"]);
   const handleLogout = () => removeCookies("token");
   return (
-    <nav className="navbar fixed top-0 bg-base-100 border-b-[1px] border-white">
+    <nav className="navbar fixed top-0 bg-base-100 border-b-[1px] border-white z-20">
       <div className="flex-1">
         <Link to={"/"} className="flex items-center text-xl">
           <FaviIcon />

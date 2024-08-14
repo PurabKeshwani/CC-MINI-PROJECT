@@ -1,26 +1,39 @@
-import VideoJS from "../components/VideoPlayer";
+import { useParams } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { videosAtom } from "../atom/video";
+import { useEffect, useMemo } from "react";
+import { getVideo } from "../lib/video";
+import Description from "../components/VideoCX/Description";
+import VideoPlayer from "../components/VideoCX";
 
-interface VideoJsOptions {
-  autoplay: boolean;
-  controls: boolean;
-  responsive: boolean;
-  fluid: boolean;
-  sources: Array<{ src: string; type: string }>;
-}
+export default function VideoPage() {
+  const { id } = useParams();
+  const [videos, setVideos] = useRecoilState(videosAtom);
+  const video = useMemo(
+    () => videos.find((video) => video.id === id),
+    [videos, id]
+  );
 
-export default function Video() {
-  const videoJsOptions: VideoJsOptions = {
-    autoplay: true,
-    controls: true,
-    responsive: true,
-    fluid: true,
-    sources: [
-      {
-        src: "https://drfghsdgfsdfgsdfgsdgfsdfgsdgf.s3.amazonaws.com/5cce0552-e4dd-4649-bff5-dbafe272db74/index.m3u8",
-        type: "application/x-mpegURL",
-      },
-    ],
-  };
+  useEffect(() => {
+    if (videos.length || !id) return;
+    getVideo(id).then((v) => {
+      if (v) setVideos((prev) => [...prev, v]);
+    });
+  }, [id, setVideos, video, videos.length]);
 
-  return <VideoJS options={videoJsOptions} />;
+  return video ? (
+    <div className="w-full h-full">
+      <div className="w-full bg-black flex items-center justify-center">
+        <div className="w-[60vw]">
+          <VideoPlayer video={video} />
+        </div>
+      </div>
+      <div className="p-5">
+        <h1 className="text-3xl font-extrabold">{video.title}</h1>
+        <Description description={video.description} className="text-xl mt-5" />
+      </div>
+    </div>
+  ) : (
+    <div>Video not found</div>
+  );
 }
