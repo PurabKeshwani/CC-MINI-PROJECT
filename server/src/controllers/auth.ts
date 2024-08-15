@@ -40,7 +40,6 @@ export async function handleSignupUser(req: Request, resp: Response) {
 
 export async function handleLoginUser(req: Request, resp: Response) {
   const user = UserLoginSchema.safeParse(req.body);
-  console.log(user);
   if (!user.success) {
     return resp.status(400).send(user.error.errors);
   }

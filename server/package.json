@@ -6,7 +6,8 @@
     "start": "tsc -b && node dist/index.js",
     "dev": "nodemon src/index.ts",
     "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:studio": "prisma studio"
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "prisma migrate reset"
   },
   "keywords": [],
   "author": "",

@@ -14,8 +14,6 @@ CREATE TABLE "Video" (
     "title" TEXT NOT NULL DEFAULT '',
     "description" TEXT NOT NULL DEFAULT '',
     "key" TEXT NOT NULL DEFAULT '',
-    "tags" TEXT[] DEFAULT ARRAY[]::TEXT[],
-    "duration" INTEGER NOT NULL DEFAULT 0,
     "likes" INTEGER NOT NULL DEFAULT 0,
     "dislikes" INTEGER NOT NULL DEFAULT 0,
     "views" INTEGER NOT NULL DEFAULT 0,
@@ -35,6 +33,7 @@ CREATE TABLE "Comment" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "parentId" INTEGER,
     "videoId" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
@@ -49,7 +48,7 @@ CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 ALTER TABLE "Video" ADD CONSTRAINT "Video_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "./constants";
-import { validateVideo, Video } from "../types/video";
+import { validateComment, validateVideo, Video } from "../types/video";
 
 export async function getVideo(id: string) {
   const res = await axios.get(BASE_URL + "/api/video/" + id, {
@@ -53,5 +53,31 @@ export async function deleteVideo(id: string) {
   const res = await axios.delete(BASE_URL + "/api/video/" + id, {
     withCredentials: true,
   });
+  return res.data;
+}
+
+export async function addComment(id: string, content: string) {
+  const res = await axios.post(
+    BASE_URL + "/api/video/" + id + "/comments",
+    { content },
+    {
+      withCredentials: true,
+    }
+  );
+  const data = res.data.comment;
+  const parsedComment = validateComment.safeParse(data);
+  if (parsedComment.success) {
+    return parsedComment.data;
+  }
+  return null;
+}
+
+export async function deleteComment(videoID: string, commentID: number) {
+  const res = await axios.delete(
+    BASE_URL + "/api/video/" + videoID + "/comments/" + commentID,
+    {
+      withCredentials: true,
+    }
+  );
   return res.data;
 }

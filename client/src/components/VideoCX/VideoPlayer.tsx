@@ -20,7 +20,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
       if (videoRef.current) {
         videoRef.current.appendChild(videoElement);
         const player = videojs(videoElement, options, () => {
-          videojs.log("player is ready");
         });
 
         playerRef.current = player;

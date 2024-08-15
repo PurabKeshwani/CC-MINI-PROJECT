@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {
+  handleAddComment,
+  handleDeleteComment,
   handleDeleteVideo,
   handleGetVideo,
   handleGetVideos,
@@ -19,5 +21,7 @@ router.use(checkToken);
 router.post("/", upload.single("video"), handleMulterErrors, handleUploadVideo);
 router.patch("/:id", handleUpdateVideo);
 router.delete("/:id", handleDeleteVideo);
+router.post("/:id/comments", handleAddComment);
+router.delete("/:id/comments/:commentId", handleDeleteComment);
 
 export default router;
