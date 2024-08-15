@@ -1,4 +1,4 @@
-import exec from "child_process";
+import exec, { spawn } from "child_process";
 import { JobCommand } from "./typs";
 
 export function uploadVideo({
@@ -29,5 +29,12 @@ export function uploadVideo({
 
   exec.execSync(execCommand, { stdio: "inherit" });
   console.log("Video transcoded and uploaded successfully.");
-  exec.execSync(`rm -rf '${videoPath}'`);
+  deletVidFromDIR(videoPath);
+  console.log("Video deleted from directory.");
+}
+
+export function deletVidFromDIR(videoPath: string) {
+  const sudo = spawn("sudo", ["-S", "rm", "-rf", videoPath]);
+  sudo.stdin.write(process.env.SUDO_PASS + "\n");
+  sudo.stdin.end();
 }

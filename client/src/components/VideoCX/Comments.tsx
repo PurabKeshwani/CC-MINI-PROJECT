@@ -56,7 +56,7 @@ export default function Comments({ video }: { video: Video }) {
   }
 
   return (
-    <div className="mt-5 mb-96">
+    <div className="mt-5 mb-20">
       <h1 className="mb-2 text-2xl">Comments</h1>
       <div className="my-4">
         <textarea

@@ -21,10 +21,14 @@ export default function Home() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
   return (
-    <div className="h-full w-full p-5 flex space-x-5 space-y-0 flex-wrap">
-      {videos.map((video, index) => {
-        return <Video key={index} video={video} />;
-      })}
+    <div className="h-full w-full p-5 flex flex-wrap">
+      {videos.length > 0 ? (
+        videos.map((video, index) => {
+          return <Video key={index} video={video} />;
+        })
+      ) : (
+        <div className="text-2xl font-bold flex justify-center items-center w-full h-full">No videos found</div>
+      )}
     </div>
   );
 }

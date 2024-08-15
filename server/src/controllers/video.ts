@@ -185,13 +185,15 @@ export async function handleUploadVideo(req: Request, res: Response) {
 
   const key = AWS_BUCKET_NAME + "/" + user.username + "/" + video.id;
 
+  const title = fileName.split(".mp4")[0].replace(/_/g, " ").replace(/-/g, " ");
+
   await prisma.video.update({
     where: {
       id: video.id,
     },
     data: {
       key,
-      title: fileName,
+      title,
     },
   });
 
@@ -199,7 +201,7 @@ export async function handleUploadVideo(req: Request, res: Response) {
     command: "upload",
     payload: {
       videoID: video.id,
-      videoPath: UPLOADS_DIR + "/" + fileNameComputed,
+      videoPath: fileNameComputed,
       accessKey: AWS_ACCESS_KEY_ID,
       secretKey: AWS_SECRET_ACCESS_KEY,
       region: AWS_REGION,
@@ -207,7 +209,8 @@ export async function handleUploadVideo(req: Request, res: Response) {
       bucketName: AWS_BUCKET_NAME,
     },
   };
-
+  console.log(params);
+  
   await redisClient.lPush("video:operation", JSON.stringify(params));
   res.status(200).json({ message: "Image processing started", id: video.id });
 }

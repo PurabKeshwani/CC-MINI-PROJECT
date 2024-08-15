@@ -1,6 +1,10 @@
 import { createClient } from "redis";
 import { jobCommand } from "./typs";
 import { uploadVideo } from "./video";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 const client = createClient();
 
 async function pocessVideo(submission: string) {
@@ -11,6 +15,8 @@ async function pocessVideo(submission: string) {
   }
 
   const obj = res.data;
+
+  obj.payload.videoPath = process.env.UPLOADS_DIR + "/" + obj.payload.videoPath;
 
   uploadVideo(obj);
 }

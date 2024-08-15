@@ -3,7 +3,7 @@ import { Video as VideoType } from "../types/video";
 
 export default function Video({ video }: { video: VideoType }) {
   return (
-    <div className="group">
+    <div className="group m-5">
       <Link
         to={`/${video.id}`}
         className="w-[400px] h-[250px] bg-gray-200 group-hover:bg-[#cfd1d4] rounded-xl flex items-center justify-center"
