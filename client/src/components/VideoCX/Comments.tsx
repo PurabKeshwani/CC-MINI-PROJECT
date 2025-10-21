@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { addComment, deleteComment } from "../../lib/video";
+import { trackVideoInteraction } from "../../lib/analytics";
 import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 import { videosAtom } from "../../atom/video";
@@ -17,6 +18,9 @@ export default function Comments({ video }: { video: Video }) {
     toast.promise(
       addComment(video.id, comment).then((res) => {
         if (res) {
+          // Track comment interaction
+          trackVideoInteraction(video.id, 'comment');
+          
           setVideos((prev) =>
             prev.map((video) =>
               video.id === video.id

@@ -5,6 +5,7 @@ import Upload from "./Upload";
 import StudioVideo from "./StudioVideo";
 import Studio from "./Studio";
 import Video from "./Video";
+import Analytics from "./Analytics";
 
 export default function index() {
   return (
@@ -16,6 +17,7 @@ export default function index() {
       <Route path="/upload" element={<Upload />} />
       <Route path="/studio" element={<Studio />} />
       <Route path="/studio/:id" element={<StudioVideo />} />
+      <Route path="/analytics" element={<Analytics />} />
     </Routes>
   );
 }

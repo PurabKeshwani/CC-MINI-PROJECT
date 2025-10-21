@@ -23,5 +23,5 @@ export default function Video({ video }: { video: VideoType }) {
     ],
   };
 
-  return <VideoJS options={videoJsOptions} />;
+  return <VideoJS options={videoJsOptions} videoId={video.id} />;
 }

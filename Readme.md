@@ -2,6 +2,13 @@
 
 Vidwave is a video streaming platform inspired by YouTube, allowing users to upload, transcode, stream, and manage video content. This project leverages modern web technologies and cloud services to provide a seamless video sharing experience.
 
+## Team
+
+Purab Keshwani
+Harshita Sewani
+Peehu Makhija
+
+
 ## Features
 
 - Video upload (up to 50MB .mp4 files)

@@ -24,6 +24,9 @@ export default function Navbar() {
           <Link to={"/upload"} className="mr-3 hidden md:block">
             Upload
           </Link>
+          <Link to={"/analytics"} className="mr-3 hidden md:block">
+            Analytics
+          </Link>
           <div className="flex-none gap-2">
             <div className="dropdown dropdown-end">
               <div

@@ -14,6 +14,7 @@ export const s3Client = new S3Client({
   credentials: {
     accessKeyId: AWS_ACCESS_KEY_ID,
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
+    sessionToken: process.env.AWS_SESSION_TOKEN || undefined,
   },
 });
 

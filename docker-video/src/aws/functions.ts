@@ -9,6 +9,7 @@ export async function uploadObject(Body: fs.ReadStream, Key: string) {
     Bucket: AWS_BUCKET_NAME,
     Key,
     Body,
+    ACL: undefined, // Disable ACL to avoid AccessControlListNotSupported error
   };
 
   const command = new PutObjectCommand(uploadParams);

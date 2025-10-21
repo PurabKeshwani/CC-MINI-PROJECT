@@ -12,6 +12,7 @@ import { updateVideo } from "../schema/video";
 import { deleteFolder, s3Client } from "../lib/s3Client";
 import { validateToken } from "../middleware";
 import { z } from "zod";
+import { initializeVideoMetrics, trackVideoView, trackVideoInteraction } from "../lib/analyticsService";
 
 export async function handleGetVideos(req: Request, res: Response) {
   const { token } = req.cookies;
@@ -197,6 +198,9 @@ export async function handleUploadVideo(req: Request, res: Response) {
     },
   });
 
+  // Initialize analytics for the new video
+  await initializeVideoMetrics(video.id, user.id, title);
+
   const params = {
     command: "upload",
     payload: {
@@ -204,6 +208,7 @@ export async function handleUploadVideo(req: Request, res: Response) {
       videoPath: fileNameComputed,
       accessKey: AWS_ACCESS_KEY_ID,
       secretKey: AWS_SECRET_ACCESS_KEY,
+      sessionToken: process.env.AWS_SESSION_TOKEN,
       region: AWS_REGION,
       outputName: user.username + "/" + video.id,
       bucketName: AWS_BUCKET_NAME,
@@ -326,6 +331,9 @@ export async function handleAddComment(req: Request, res: Response) {
         user: { connect: { id: user.id } },
       },
     });
+
+    // Track comment analytics
+    await trackVideoInteraction(videoId, user.id, 'comment');
 
     res.status(201).json({
       comment: {

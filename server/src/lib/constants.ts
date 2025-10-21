@@ -17,4 +17,4 @@ export const HASH_SUFFIX = process.env.HASH_SUFFIX || "yy";
 export const HASH_SALT = process.env.HASH_SALT || "zz";
 export const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
-export const UPLOADS_DIR = process.env.UPLOADS_DIR || "uploads";
+export const UPLOADS_DIR = process.env.UPLOADS_DIR || "D:\\cc mini\\VidWave\\server\\uploads";

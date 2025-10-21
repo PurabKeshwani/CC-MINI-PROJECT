@@ -8,6 +8,7 @@ export const jobCommand = z.object({
     videoPath: z.string(),
     accessKey: z.string(),
     secretKey: z.string(),
+    sessionToken: z.string().optional(),
     region: z.string(),
     outputName: z.string().optional(),
     bucketName: z.string(),
