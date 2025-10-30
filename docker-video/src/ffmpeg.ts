@@ -45,6 +45,8 @@ export function transCodeVideo(inputPath: string): Promise<
       resolution: string;
       bitrate: string;
     }[] = [];
+    let completedTasks = 0;
+    let totalTasks = 0;
 
     const createMasterPlaylist = () => {
       const playlistContent = virResolutions
@@ -96,7 +98,8 @@ export function transCodeVideo(inputPath: string): Promise<
             path: resolutionOutputDir,
             resolution: item.resolution,
           });
-          if (outputPaths.length === virResolutions.length) {
+          completedTasks += 1;
+          if (completedTasks === totalTasks) {
             createMasterPlaylist();
             resolve(outputPaths);
           }
@@ -138,8 +141,45 @@ export function transCodeVideo(inputPath: string): Promise<
 
       console.log("VirResolutions to transcode: ", virResolutions);
 
+      // If no valid resolutions, fail fast to signal upstream
+      if (virResolutions.length === 0) {
+        reject(new Error("No valid resolutions to transcode for the given input video"));
+        return;
+      }
+
       // Process only filtered resolutions
+      totalTasks = virResolutions.length + 1; // +1 for thumbnail generation
       virResolutions.forEach(processResolution);
+
+      // Generate a thumbnail at ~1s into the video
+      const thumbnailPath = path.join(OUTPUT_DIR, "thumbnail.jpg");
+      ffmpeg(inputPath)
+        .screenshots({
+          timestamps: ["1"],
+          filename: "thumbnail.jpg",
+          folder: OUTPUT_DIR,
+          size: "1280x?",
+        })
+        .on("end", () => {
+          // Ensure file exists
+          if (fs.existsSync(thumbnailPath)) {
+            console.log("Thumbnail generated at", thumbnailPath);
+          }
+          completedTasks += 1;
+          if (completedTasks === totalTasks) {
+            createMasterPlaylist();
+            resolve(outputPaths);
+          }
+        })
+        .on("error", (err) => {
+          console.log("Thumbnail generation error:", err.message);
+          // Even if thumbnail fails, continue with video processing
+          completedTasks += 1;
+          if (completedTasks === totalTasks) {
+            createMasterPlaylist();
+            resolve(outputPaths);
+          }
+        });
     });
   });
 }

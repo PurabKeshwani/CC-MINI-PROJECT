@@ -13,6 +13,9 @@ const transcode = async (upload = false) => {
   console.log("Transcoding finished", playlists);
   if (upload) {
     const path = await uploadDirectory(id);
+    if (!path) {
+      throw new Error("No output generated to upload");
+    }
     console.log("Uploaded", path);
   }
   exec(`rm -rf "output"`);
@@ -27,23 +30,33 @@ const upload = async () => {
   await uploadObject(fileStream, id);
 };
 
-switch (PROCESS) {
-  case "transcode&upload":
-    transcode(true);
-    break;
+const run = async () => {
+  try {
+    switch (PROCESS) {
+      case "transcode&upload":
+        await transcode(true);
+        break;
 
-  case "transcode":
-    transcode();
-    break;
+      case "transcode":
+        await transcode();
+        break;
 
-  case "upload":
-    upload();
-    break;
+      case "upload":
+        await upload();
+        break;
 
-  case "test":
-    console.log("Test");
-    break;
+      case "test":
+        console.log("Test");
+        break;
 
-  default:
-    throw new Error("Invalid process");
-}
+      default:
+        throw new Error("Invalid process");
+    }
+    process.exit(0);
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+};
+
+run();

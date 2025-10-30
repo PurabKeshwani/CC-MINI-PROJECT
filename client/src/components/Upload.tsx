@@ -152,28 +152,34 @@ export default function UploadBox() {
   };
 
   return (
-    <div className="w-full h-full lg:w-[90%] lg:h-[90%] lg:shadow-big lg:rounded-xl flex flex-col justify-center items-center">
-      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-10">
-        Upload a video
-      </h1>
+    <div className="w-full h-full lg:w-[90%] lg:h-[90%] flex flex-col justify-center items-center px-4">
+      <div className="w-full max-w-5xl mb-8 text-center">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+          Upload a video
+        </h1>
+        <p className="mt-3 text-gray-400">
+          Drag and drop your MP4 or click to browse. We’ll transcode it for smooth streaming.
+        </p>
+      </div>
       <div
-        className={`flex items-center justify-center w-[90%] h-64 border-2 rounded-lg cursor-pointer border-dashed ${
+        className={`relative flex items-center justify-center w-[95%] max-w-5xl h-80 rounded-2xl cursor-pointer border-2 border-dashed transition-colors card-dark ${
           isDragOver
-            ? "border-blue-500 bg-gray-100 dark:border-blue-400 dark:bg-gray-800"
-            : "border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700 hover:dark:bg-gray-800 hover:border-blue-500"
+            ? "border-[#2563EB] bg-white"
+            : "border-[#e5e7eb] bg-white hover:border-[#2563EB]"
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onChange={handleFileChange}
       >
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-transparent to-black/5" />
         <label
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-full cursor-pointer"
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <svg
-              className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+              className="w-10 h-10 mb-4 text-[#2563EB]"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -187,17 +193,24 @@ export default function UploadBox() {
                 d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
               />
             </svg>
-            <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-              <span className="font-semibold">Click to upload</span> or drag and
-              drop a video
+            <p className="mb-2 text-sm text-gray-300">
+              <span className="font-semibold text-white">Click to upload</span> or drag and drop a video
             </p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">
-              MP4 files only
-            </p>
+            <div className="flex items-center gap-3 text-xs text-gray-500">
+              <span className="px-2 py-1 rounded bg-gray-100 border border-[#e5e7eb]">MP4</span>
+              <span>Max size 50MB</span>
+            </div>
             {file && (
               <>
-                <p className="text-white text-2xl mt-2">{file.name}</p>
-                <p className="text-white text-2xl mt-2">{size}</p>
+                <div className="mt-4 px-3 py-2 rounded-lg bg-gray-100 border border-[#e5e7eb]">
+                  <p className="text-[#111827] text-sm md:text-base font-semibold truncate max-w-[70vw] md:max-w-[40vw]">{file.name}</p>
+                  <p className="text-gray-600 text-xs mt-1">{size}</p>
+                </div>
+                {loading && (
+                  <div className="w-[220px] h-2 mt-4 bg-[#e5e7eb] rounded-full overflow-hidden">
+                    <div className="h-full w-1/2 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] animate-pulse" />
+                  </div>
+                )}
               </>
             )}
           </div>
@@ -213,14 +226,14 @@ export default function UploadBox() {
         {file && (
           <>
             <button
-              className="mt-10 px-5 py-2 rounded-lg bg-red-600 text-black hover:bg-red-800"
+              className="mt-10 px-5 py-2 rounded-lg btn-secondary"
               onClick={resetForm}
             >
               Reset
             </button>
             <button
               onClick={loading ? undefined : finalUpload}
-              className="flex justify-center items-center w-20 mt-10 px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-800"
+              className="flex justify-center items-center min-w-[140px] mt-10 px-5 py-2 rounded-lg btn-primary"
             >
               {loading ? (
                 <svg
@@ -236,6 +249,9 @@ export default function UploadBox() {
             </button>
           </>
         )}
+      </div>
+      <div className="mt-6 text-xs text-gray-500 text-center">
+        Your file stays private. We only process it to generate streaming renditions.
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { deleteVideo, getVideo, updateVideo } from "../lib/video";
+import { deleteVideo, getVideo, getVideoStatus, updateVideo } from "../lib/video";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Video, VideoVisibility } from "../types/video";
 import { useCookies } from "react-cookie";
@@ -78,6 +78,36 @@ function StudioVideo({
   const [loading, setLoading] = useState(false);
   const [deteleLoading, setDeleteLoading] = useState(false);
   const setVideos = useSetRecoilState(videosAtom);
+  const [processing, setProcessing] = useState<{ready: boolean; percent: number; message: string}>({ready: true, percent: 100, message: ""});
+
+  // Poll backend for processing status until ready
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval> | null = null;
+    let cancelled = false;
+    if (video) {
+      // Start in processing state until confirmed ready
+      setProcessing((p) => ({ ...p, ready: false, percent: 5, message: "Queued..." }));
+      const poll = async () => {
+        try {
+          const status = await getVideoStatus(video.id);
+          if (cancelled) return;
+          setProcessing({ ready: status.ready, percent: status.percent, message: status.message });
+          if (status.ready && interval) {
+            clearInterval(interval);
+            interval = null;
+          }
+        } catch (e) {
+          // keep polling silently
+        }
+      };
+      poll();
+      interval = setInterval(poll, 2000);
+    }
+    return () => {
+      cancelled = true;
+      if (interval) clearInterval(interval);
+    };
+  }, [video]);
 
   const handleEditVideo = useCallback(() => {
     if (loading)
@@ -149,7 +179,37 @@ function StudioVideo({
   }, [handleEditVideo]);
 
   return (
-    <div className="w-full h-full flex flex-col p-10 bg-gray-800 overflow-y-auto overflow-x-hidden">
+    <div className="w-full h-full flex flex-col p-10 bg-[#ffffff] overflow-y-auto overflow-x-hidden relative">
+      {!processing.ready && (
+        <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/60 flex items-center justify-center p-6">
+          <div className="w-full max-w-xl rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 p-6 shadow-2xl">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-full bg-gray-700 relative overflow-hidden">
+                <div className="absolute inset-0 animate-pulse bg-gray-600/40" />
+                <svg className="absolute inset-0 m-auto w-6 h-6 text-indigo-400 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M12 18v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M4.93 4.93l2.83 2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M16.24 16.24l2.83 2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M2 12h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M18 12h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M4.93 19.07l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M16.24 7.76l2.83-2.83" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400">Processing video</p>
+                <h3 className="text-lg font-semibold text-white">{processing.message}</h3>
+              </div>
+            </div>
+            <div className="w-full h-3 bg-gray-700 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 transition-all duration-500" style={{ width: `${processing.percent}%` }} />
+            </div>
+            <div className="mt-2 text-right text-sm text-gray-300 font-medium">{processing.percent}%</div>
+            <p className="mt-3 text-xs text-gray-400">We’re transcoding multiple qualities and uploading to the cloud. This can take a few minutes depending on video length.</p>
+          </div>
+        </div>
+      )}
       <div className="mb-10 flex justify-between">
         <h1 className="text-3xl font-extrabold ">Video Details</h1>
         <h1 className="text-xl font-extrabold">
@@ -171,7 +231,7 @@ function StudioVideo({
         <input
           type="text"
           placeholder="Enter video title"
-          className="input input-bordered w-full mx-3"
+          className="input input-bordered input-dark w-full mx-3"
           value={editVideo.title}
           onChange={(e) =>
             setEditValues((prev) => ({ ...prev, title: e.target.value }))
@@ -182,7 +242,7 @@ function StudioVideo({
         <p className="text-2xl font-bold">Description:</p>
         <textarea
           placeholder="Enter video description"
-          className="input input-bordered mx-3 min-h-[400px] px-5 py-3"
+          className="textarea-dark mx-3 min-h-[400px] px-5 py-3 rounded-lg"
           value={editVideo.description}
           onChange={(e) =>
             setEditValues((prev) => ({
@@ -195,7 +255,7 @@ function StudioVideo({
       <label className="w-full flex items-center m-3">
         <p className="text-2xl font-bold mr-3">Visibility:</p>
         <select
-          className="select select-bordered w-full max-w-xs"
+          className="select select-bordered select-dark w-full max-w-xs"
           value={editVideo.visibility}
           onChange={(e) =>
             setEditValues((prev) => ({
@@ -214,7 +274,7 @@ function StudioVideo({
       <div className="flex space-x-5 mx-auto">
         <button
           onClick={handleEditVideo}
-          className={`btn btn-success mt-10 w-[200px] ${
+          className={`btn btn-primary mt-10 w-[200px] ${
             loading ? "animate-pulse" : ""
           }`}
         >
@@ -233,7 +293,7 @@ function StudioVideo({
         </button>
         <button
           onClick={handeleDeleteVideo}
-          className={`btn btn-error mt-10 w-[200px] mx-auto ${
+          className={`btn btn-secondary mt-10 w-[200px] mx-auto ${
             deteleLoading ? "animate-pulse" : ""
           }`}
         >

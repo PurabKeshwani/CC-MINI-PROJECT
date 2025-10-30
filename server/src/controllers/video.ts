@@ -8,6 +8,7 @@ import {
   UPLOADS_DIR,
 } from "../lib/constants";
 import prisma from "../lib/prisma";
+import { ListObjectsV2Command, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { updateVideo } from "../schema/video";
 import { deleteFolder, s3Client } from "../lib/s3Client";
 import { validateToken } from "../middleware";
@@ -69,6 +70,7 @@ export async function handleGetVideos(req: Request, res: Response) {
       title: video.title,
       description: video.description,
       url: `https://${AWS_BUCKET_NAME}.s3.amazonaws.com/${key}/index.m3u8`,
+      thumbnail: `https://${AWS_BUCKET_NAME}.s3.amazonaws.com/${key}/thumbnail.jpg`,
       likes: video.likes,
       dislikes: video.dislikes,
       views: video.views,
@@ -151,6 +153,7 @@ export async function handleGetVideo(req: Request, res: Response) {
       title: video.title,
       description: video.description,
       url: `https://${AWS_BUCKET_NAME}.s3.amazonaws.com/${key}/index.m3u8`,
+      thumbnail: `https://${AWS_BUCKET_NAME}.s3.amazonaws.com/${key}/thumbnail.jpg`,
       likes: video.likes,
       dislikes: video.dislikes,
       views: video.views,
@@ -218,6 +221,66 @@ export async function handleUploadVideo(req: Request, res: Response) {
   
   await redisClient.lPush("video:operation", JSON.stringify(params));
   res.status(200).json({ message: "Image processing started", id: video.id });
+}
+
+export async function handleGetVideoStatus(req: Request, res: Response) {
+  const { id } = req.params;
+
+  const video = await prisma.video.findUnique({
+    where: { id },
+    include: { user: true },
+  });
+
+  if (!video) {
+    return res.status(404).json({ message: "Video not found" });
+  }
+
+  // key is stored as `${bucket}/${username}/${video.id}`
+  const [bucket, ...prefixParts] = video.key.split("/");
+  const prefix = prefixParts.join("/");
+
+  try {
+    const listCommand = new ListObjectsV2Command({
+      Bucket: bucket,
+      Prefix: prefix,
+    });
+    const listResp = await s3Client.send(listCommand);
+
+    const objects = listResp.Contents || [];
+    const objectCount = objects.length;
+    const hasMaster = objects.some((o) => o.Key?.endsWith("index.m3u8"));
+
+    // Smooth, monotonic progress backed by Redis so UI doesn't stick at 0%
+    const progressKey = `video:status:${id}`;
+    let currentPercent = 0;
+    const stored = await redisClient.get(progressKey);
+    if (stored) {
+      const parsed = Number(stored);
+      if (!Number.isNaN(parsed)) currentPercent = parsed;
+    }
+
+    let percent = currentPercent;
+    if (hasMaster) {
+      percent = 100;
+      await redisClient.del(progressKey);
+    } else {
+      // baseline bump with objectCount to feel responsive, but cap at 90%
+      const baseline = Math.min(80, Math.floor(objectCount / 4) * 5); // ~+5% every few files
+      const next = Math.max(currentPercent, baseline) + 2; // gentle +2% per poll
+      percent = Math.min(90, next);
+      await redisClient.setEx(progressKey, 60 * 30, String(percent));
+    }
+
+    res.json({
+      ready: hasMaster,
+      percent,
+      objectCount,
+      message: hasMaster ? "Ready to stream" : "Transcoding & uploading in progress",
+    });
+  } catch (e) {
+    console.error(e);
+    return res.status(500).json({ message: "Failed to fetch status" });
+  }
 }
 
 export async function handleUpdateVideo(req: Request, res: Response) {

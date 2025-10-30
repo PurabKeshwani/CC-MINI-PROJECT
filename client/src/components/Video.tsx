@@ -6,14 +6,23 @@ export default function Video({ video }: { video: VideoType }) {
     <div className="group m-5">
       <Link
         to={`/${video.id}`}
-        className="w-[400px] h-[250px] bg-gray-200 group-hover:bg-[#cfd1d4] rounded-xl flex items-center justify-center"
+        className="w-[400px] h-[250px] bg-gray-200 group-hover:bg-[#cfd1d4] rounded-xl overflow-hidden block"
       >
-        <div className="w-[80%] h-[80%] flex items-center justify-center rounded-xl border-4 border-gray-800 ">
-          <svg fill="black" viewBox="0 0 16 16" className="w-20 h-20">
-            <path d="M2 3a.5.5 0 00.5.5h11a.5.5 0 000-1h-11A.5.5 0 002 3zm2-2a.5.5 0 00.5.5h7a.5.5 0 000-1h-7A.5.5 0 004 1zm2.765 5.576A.5.5 0 006 7v5a.5.5 0 00.765.424l4-2.5a.5.5 0 000-.848l-4-2.5z" />
-            <path d="M1.5 14.5A1.5 1.5 0 010 13V6a1.5 1.5 0 011.5-1.5h13A1.5 1.5 0 0116 6v7a1.5 1.5 0 01-1.5 1.5h-13zm13-1a.5.5 0 00.5-.5V6a.5.5 0 00-.5-.5h-13A.5.5 0 001 6v7a.5.5 0 00.5.5h13z" />
-          </svg>
-        </div>
+        {video.thumbnail ? (
+          <img
+            src={video.thumbnail}
+            alt={video.title}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <svg fill="black" viewBox="0 0 16 16" className="w-20 h-20">
+              <path d="M2 3a.5.5 0 00.5.5h11a.5.5 0 000-1h-11A.5.5 0 002 3zm2-2a.5.5 0 00.5.5h7a.5.5 0 000-1h-7A.5.5 0 004 1zm2.765 5.576A.5.5 0 006 7v5a.5.5 0 00.765.424l4-2.5a.5.5 0 000-.848l-4-2.5z" />
+              <path d="M1.5 14.5A1.5 1.5 0 010 13V6a1.5 1.5 0 011.5-1.5h13A1.5 1.5 0 0116 6v7a1.5 1.5 0 01-1.5 1.5h-13zm13-1a.5.5 0 00.5-.5V6a.5.5 0 00-.5-.5h-13A.5.5 0 001 6v7a.5.5 0 00.5.5h13z" />
+            </svg>
+          </div>
+        )}
       </Link>
       <div className="flex pl-3 pt-1 justify-between items-center">
         <h2 className="text-xl">{video.title}</h2>

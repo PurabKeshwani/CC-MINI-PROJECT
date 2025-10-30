@@ -1,6 +1,5 @@
 import { useRef } from "react";
 import { addComment, deleteComment } from "../../lib/video";
-import { trackVideoInteraction } from "../../lib/analytics";
 import toast from "react-hot-toast";
 import { useSetRecoilState } from "recoil";
 import { videosAtom } from "../../atom/video";
@@ -18,9 +17,6 @@ export default function Comments({ video }: { video: Video }) {
     toast.promise(
       addComment(video.id, comment).then((res) => {
         if (res) {
-          // Track comment interaction
-          trackVideoInteraction(video.id, 'comment');
-          
           setVideos((prev) =>
             prev.map((video) =>
               video.id === video.id
@@ -123,7 +119,7 @@ export default function Comments({ video }: { video: Video }) {
                       onClick={() => handleDleteComment(video.id, comment.id)}
                       className="rounded-xl rounded-tr-none overflow-hidden"
                     >
-                      <div className="flex flex-col items-start px-3 py-2 hover:bg-red-600 hover:text-black">
+                      <div className="flex flex-col items-start px-3 py-2 hover:bg-[#2563EB] hover:text-white">
                         Delete
                       </div>
                     </div>

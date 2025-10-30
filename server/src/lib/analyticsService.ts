@@ -106,7 +106,7 @@ export async function trackVideoView(videoId: string, userId: string, watchTime:
 
       await docClient.send(new UpdateCommand({
         TableName: "UserEngagement",
-        Key: { userId, videoId },
+        Key: { userId },
         UpdateExpression: userUpdateExpression,
         ExpressionAttributeNames: userExpressionNames,
         ExpressionAttributeValues: userExpressionValues,

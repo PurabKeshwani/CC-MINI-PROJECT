@@ -24,6 +24,7 @@ export const validateVideo = z.object({
   title: z.string(),
   description: z.string(),
   url: z.string(),
+  thumbnail: z.string(),
   likes: z.number(),
   dislikes: z.number(),
   views: z.number(),

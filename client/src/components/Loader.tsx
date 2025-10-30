@@ -10,7 +10,7 @@ export default function Loader({
   return (
     <svg
       viewBox="0 0 1024 1024"
-      fill="white"
+      fill="#2563EB"
       height={height}
       width={width}
       className={`animate-spin ${className}`}

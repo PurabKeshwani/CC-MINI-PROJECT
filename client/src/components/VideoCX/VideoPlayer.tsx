@@ -42,12 +42,13 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
               
               // Track watch time every 10 seconds
               if (currentTime > 0 && currentTime - lastTrackedTime >= 10) {
-                const timeWatched = currentTime - lastTrackedTime;
-                watchTimeAccumulator += timeWatched;
-                
-                console.log(`📊 Tracking watch time for video: ${videoId} - ${timeWatched}s (total: ${watchTimeAccumulator}s)`);
-                trackVideoView(videoId, watchTimeAccumulator);
-                
+                const delta = currentTime - lastTrackedTime;
+                watchTimeAccumulator += delta;
+
+                console.log(`📊 Tracking watch time for video: ${videoId} - +${delta}s (total: ${watchTimeAccumulator}s)`);
+                // Send only the delta to avoid double counting on the server
+                trackVideoView(videoId, delta);
+
                 lastTrackedTime = currentTime;
               }
             });
@@ -56,9 +57,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
             player.on('ended', () => {
               const finalTime = player.currentTime();
               if (finalTime > lastTrackedTime) {
-                const finalWatchTime = watchTimeAccumulator + (finalTime - lastTrackedTime);
-                console.log(`📊 Final watch time for video: ${videoId} - ${finalWatchTime}s`);
-                trackVideoView(videoId, finalWatchTime);
+                const delta = finalTime - lastTrackedTime;
+                watchTimeAccumulator += delta;
+                console.log(`📊 Final watch time for video: ${videoId} - +${delta}s (total: ${watchTimeAccumulator}s)`);
+                trackVideoView(videoId, delta);
               }
             });
           }

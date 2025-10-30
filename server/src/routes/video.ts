@@ -7,6 +7,7 @@ import {
   handleGetVideos,
   handleUpdateVideo,
   handleUploadVideo,
+  handleGetVideoStatus,
 } from "../controllers/video";
 import upload, { handleMulterErrors } from "../lib/multerConfig";
 import { checkToken } from "../middleware";
@@ -15,6 +16,7 @@ const router = Router();
 
 router.get("/", handleGetVideos);
 router.get("/:id", handleGetVideo);
+router.get("/:id/status", handleGetVideoStatus);
 
 router.use(checkToken);
 

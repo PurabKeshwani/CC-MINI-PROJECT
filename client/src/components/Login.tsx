@@ -34,15 +34,15 @@ export default function Login() {
     });
   }
   return (
-    <div className="h-full w-full bg-gray-800 flex flex-col items-center justify-center py-6 px-4">
+    <div className="h-full w-full bg-white flex flex-col items-center justify-center py-6 px-4">
       <div className="max-w-md w-full">
-        <div className="p-8 rounded-2xl bg-gray-300 shadow">
-          <h2 className="text-gray-800 text-center text-2xl font-bold">
+        <div className="p-8 rounded-2xl card-dark">
+          <h2 className="text-white text-center text-2xl font-extrabold">
             Sign in
           </h2>
           <form onSubmit={handleLogin} className="mt-8 space-y-4">
             <div>
-              <label className="text-gray-800 text-sm mb-2 block">
+              <label className="text-gray-300 text-sm mb-2 block">
                 Username
               </label>
               <div className="relative flex items-center">
@@ -50,13 +50,13 @@ export default function Login() {
                   name="username"
                   type="text"
                   required
-                  className="w-full placeholder-black text-sm outline-none px-4 py-3 rounded-md bg-gray-400 text-black"
+                  className="w-full text-sm outline-none px-4 py-3 rounded-md input-dark"
                   placeholder="Enter user name"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="#000"
-                  stroke="#000"
+                  fill="#737373"
+                  stroke="#737373"
                   className="w-4 h-4 absolute right-4"
                   viewBox="0 0 24 24"
                 >
@@ -70,7 +70,7 @@ export default function Login() {
             </div>
 
             <div>
-              <label className="text-gray-800 text-sm mb-2 block">
+              <label className="text-gray-300 text-sm mb-2 block">
                 Password
               </label>
               <div className="relative flex items-center">
@@ -78,13 +78,13 @@ export default function Login() {
                   name="password"
                   type="password"
                   required
-                  className="w-full placeholder-black text-sm outline-none px-4 py-3 rounded-md bg-gray-400 text-black"
+                  className="w-full text-sm outline-none px-4 py-3 rounded-md input-dark"
                   placeholder="Enter password"
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  fill="#000"
-                  stroke="#bbb"
+                  fill="#737373"
+                  stroke="#737373"
                   className="w-4 h-4 absolute right-4 cursor-pointer"
                   viewBox="0 0 128 128"
                 >
@@ -99,16 +99,16 @@ export default function Login() {
             <div className="!mt-8">
               <button
                 type="submit"
-                className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                className="w-full py-3 px-4 text-sm tracking-wide rounded-lg text-white btn-primary focus:outline-none"
               >
                 Sign in
               </button>
             </div>
-            <p className="text-gray-800 text-sm !mt-8 text-center">
+            <p className="text-gray-300 text-sm !mt-8 text-center">
               Don't have an account?
               <Link
                 to={"/register"}
-                className="text-blue-600 hover:underline ml-1 whitespace-nowrap font-semibold"
+                className="text-[#2563EB] hover:underline ml-1 whitespace-nowrap font-semibold"
               >
                 Register here
               </Link>

@@ -1,3 +1,68 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    @apply bg-[color:var(--b1,#ffffff)] text-black min-h-full;
+    background-color: #ffffff; /* light base */
+    color: #111827;
+  }
+
+  ::selection {
+    background: #2563EB;
+    color: #ffffff;
+  }
+}
+
+@layer components {
+  /* Brand font utility - update the font-face URL below after uploading */
+  .font-brand {
+    font-family: 'BrandFont', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+    letter-spacing: -0.02em;
+  }
+  .btn-primary {
+    @apply bg-[#2563EB] border-0 text-white hover:bg-[#1D4ED8];
+  }
+  .btn-secondary {
+    @apply bg-white border border-[#e5e7eb] text-[#111827] hover:bg-[#f9fafb];
+  }
+  .card-dark {
+    @apply bg-white border border-[#e5e7eb] shadow-big;
+  }
+  .input-dark, .select-dark, .textarea-dark {
+    @apply bg-white border border-[#e5e7eb] text-[#111827] placeholder-gray-500 focus:outline-none focus:border-[#2563EB];
+  }
+}
+
+/* Custom brand font (place your .otf in client/public/fonts and update the file name) */
+@font-face {
+  font-family: 'BrandFont';
+  src: url('/fonts/Brand.otf') format('opentype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Scrollbar - dark minimal */
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9ca3af #f3f4f6;
+}
+/* Chrome/Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #9ca3af;
+  border-radius: 8px;
+  border: 2px solid #f3f4f6;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}

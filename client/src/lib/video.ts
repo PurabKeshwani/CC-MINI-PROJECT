@@ -81,3 +81,10 @@ export async function deleteComment(videoID: string, commentID: number) {
   );
   return res.data;
 }
+
+export async function getVideoStatus(id: string) {
+  const res = await axios.get(BASE_URL + "/api/video/" + id + "/status", {
+    withCredentials: true,
+  });
+  return res.data as { ready: boolean; percent: number; objectCount: number; message: string };
+}
