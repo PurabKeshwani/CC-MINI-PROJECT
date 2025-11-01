@@ -35,7 +35,7 @@ export default function Register() {
     });
   }
   return (
-    <div className="h-full w-full bg-white flex flex-col items-center justify-center py-6 px-4">
+    <div className="h-full w-full bg-[#141414] flex flex-col items-center justify-center py-6 px-4">
       <div className="max-w-md w-full">
         <div className="p-8 rounded-2xl card-dark">
           <h2 className="text-white text-center text-2xl font-extrabold">
@@ -130,7 +130,7 @@ export default function Register() {
               Already have an account?{" "}
               <Link
                 to={"/login"}
-                className="text-[#2563EB] hover:underline ml-1 whitespace-nowrap font-semibold"
+                className="text-[#E50914] hover:underline ml-1 whitespace-nowrap font-semibold"
               >
                 Login here
               </Link>

@@ -24,10 +24,10 @@ export default function App() {
       <Navbar />
       <Toaster />
       {routeLoading && (
-        <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-[#2563EB] animate-pulse" />
+        <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-[#E50914] animate-pulse" />
       )}
       <main
-        className="bg-[#ffffff] min-h-[100svh] w-screen overflow-y-scroll text-[#111827]"
+        className="bg-[#141414] min-h-[100svh] w-screen overflow-y-scroll text-white"
         style={{ paddingTop: `${navHeight}px` }}
       >
         <Pages />

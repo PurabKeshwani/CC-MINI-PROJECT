@@ -26,12 +26,12 @@ export default function Home() {
   const secondRow = useMemo(() => videos.slice(10, 20), [videos]);
 
   return (
-    <div className="min-h-screen w-full pt-16 bg-white">
+    <div className="min-h-screen w-full pt-16 bg-[#141414]">
       <div className="px-4 md:px-8">
         {featuredList.length > 0 && <HeroCarousel videos={featuredList} />}
         
         {firstRow.length > 0 && (
-          <HorizontalRow title="Popular on StreamFlix" videos={firstRow} />
+          <HorizontalRow title="Popular on VidPulse" videos={firstRow} />
         )}
         {secondRow.length > 0 && (
           <HorizontalRow title="Because you watched" videos={secondRow} />

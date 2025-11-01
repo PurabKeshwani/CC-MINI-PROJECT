@@ -41,11 +41,7 @@ export default function HeroCarousel({ videos, intervalMs = 5000 }: { videos: Vi
             {items.map((_, i) => (
               <span
                 key={i}
-                className={`rounded-full transition-all ${
-                  i === index
-                    ? "w-3 h-3 bg-[#2563EB] ring-2 ring-white/80 shadow"
-                    : "w-2 h-2 bg-gray-300"
-                }`}
+                className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-[#E50914]" : "w-3 bg-white/40"}`}
               />
             ))}
           </div>

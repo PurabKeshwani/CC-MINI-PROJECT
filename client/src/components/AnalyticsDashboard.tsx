@@ -127,12 +127,12 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
   // Check if user is authenticated
   if (!token) {
     return (
-      <div className="min-h-screen bg-white p-6">
+      <div className="min-h-screen bg-[#141414] p-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-20">
             <div className="text-6xl mb-4">🔒</div>
-            <h1 className="text-4xl font-extrabold text-[#2563EB] mb-4">Authentication Required</h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <h1 className="text-4xl font-extrabold text-[#E50914] mb-4">Authentication Required</h1>
+            <p className="text-xl text-gray-300 mb-8">
               Please log in to view your analytics dashboard
             </p>
             <a href="/login" className="btn btn-primary btn-lg">
@@ -153,13 +153,13 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
   }
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-[#141414] p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-extrabold text-[#2563EB] mb-2">📊 Analytics Dashboard</h1>
-            <p className="text-gray-600">Track your video performance and audience engagement</p>
+            <h1 className="text-4xl font-extrabold text-[#E50914] mb-2">📊 Analytics Dashboard</h1>
+            <p className="text-gray-300">Track your video performance and audience engagement</p>
           </div>
           <button
             onClick={() => {
@@ -193,7 +193,7 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                 <div className="text-3xl mr-3">👁️</div>
                 <div>
                   <h3 className="text-lg font-semibold">Total Views</h3>
-                  <p className="text-2xl font-bold text-[#2563EB]">{formatNumber(totalViews)}</p>
+                  <p className="text-2xl font-bold text-[#E50914]">{formatNumber(totalViews)}</p>
                 </div>
               </div>
             </div>
@@ -205,7 +205,7 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                 <div className="text-3xl mr-3">👍</div>
                 <div>
                   <h3 className="text-lg font-semibold">Total Likes</h3>
-                  <p className="text-2xl font-bold text-[#2563EB]">{formatNumber(totalLikes)}</p>
+                  <p className="text-2xl font-bold text-[#E50914]">{formatNumber(totalLikes)}</p>
                 </div>
               </div>
             </div>
@@ -217,7 +217,7 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                 <div className="text-3xl mr-3">💬</div>
                 <div>
                   <h3 className="text-lg font-semibold">Total Comments</h3>
-                  <p className="text-2xl font-bold text-[#2563EB]">{formatNumber(totalComments)}</p>
+                  <p className="text-2xl font-bold text-[#E50914]">{formatNumber(totalComments)}</p>
                 </div>
               </div>
             </div>
@@ -229,7 +229,7 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                 <div className="text-3xl mr-3">⏱️</div>
                 <div>
                   <h3 className="text-lg font-semibold">Watch Time</h3>
-                  <p className="text-2xl font-bold text-[#2563EB]">{formatDuration(totalWatchTime)}</p>
+                  <p className="text-2xl font-bold text-[#E50914]">{formatDuration(totalWatchTime)}</p>
                 </div>
               </div>
             </div>
@@ -252,10 +252,10 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                   {videoMetrics.map((video) => (
                     <div 
                       key={video.videoId} 
-                    className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                      className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
                         selectedVideo === video.videoId 
-                          ? 'border-[#2563EB] bg-[#2563EB]/10' 
-                          : 'border-[#e5e7eb] hover:border-[#2563EB]/50'
+                          ? 'border-[#E50914] bg-[#E50914]/10' 
+                          : 'border-[#2b2b2b] hover:border-[#E50914]/50'
                       }`}
                       onClick={() => setSelectedVideo(selectedVideo === video.videoId ? null : video.videoId)}
                     >
@@ -281,14 +281,14 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                             </div>
                           </div>
                         </div>
-                        <div className="text-right text-sm text-gray-500">
+                        <div className="text-right text-sm text-gray-400">
                           <p>Created: {formatDate(video.createdAt)}</p>
                           <p>Updated: {formatDate(video.updatedAt)}</p>
                         </div>
                       </div>
                       
                       {selectedVideo === video.videoId && (
-                        <div className="mt-4 pt-4 border-t border-[#e5e7eb]">
+                        <div className="mt-4 pt-4 border-t border-[#2b2b2b]">
                           <div className="grid grid-cols-2 gap-4">
                             <div>
                               <h4 className="font-semibold mb-2">Engagement Rate</h4>
@@ -305,10 +305,10 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
                             </div>
                             <div>
                               <h4 className="font-semibold mb-2">Watch Time</h4>
-                              <p className="text-lg font-semibold text-[#2563EB]">
+                              <p className="text-lg font-semibold text-[#E50914]">
                                 {formatDuration(video.watchTime)}
                               </p>
-                              <p className="text-sm text-gray-500">
+                              <p className="text-sm text-gray-400">
                                 Avg: {video.views > 0 ? formatDuration(video.watchTime / video.views) : '0s'} per view
                               </p>
                             </div>
@@ -335,9 +335,9 @@ export default function AnalyticsDashboard({ userId }: AnalyticsDashboardProps) 
               ) : (
                 <div className="space-y-4">
                   {trendingVideos.map((video, index) => (
-                    <div key={video.videoId} className="p-4 rounded-lg border border-[#e5e7eb]">
+                    <div key={video.videoId} className="p-4 rounded-lg border border-[#2b2b2b]">
                       <div className="flex items-center mb-2">
-                        <div className="text-2xl font-bold text-[#2563EB] mr-3">#{index + 1}</div>
+                        <div className="text-2xl font-bold text-[#E50914] mr-3">#{index + 1}</div>
                         <h3 className="font-semibold text-lg">{video.title}</h3>
                       </div>
                       <div className="grid grid-cols-3 gap-4 text-sm">

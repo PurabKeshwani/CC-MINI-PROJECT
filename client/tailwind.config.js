@@ -5,19 +5,18 @@ export default {
     extend: {
       colors: {
         netflix: {
-          // repurposed as light blue theme
-          black: "#ffffff",
-          darker: "#f9fafb",
-          red: "#2563EB", // primary blue
-          redDark: "#1D4ED8", // darker blue
+          black: "#141414",
+          darker: "#0b0b0b",
+          red: "#E50914",
+          redDark: "#B20710",
           gray: {
-            100: "#f3f4f6",
-            200: "#e5e7eb",
-            300: "#d1d5db",
-            500: "#6b7280",
-            700: "#374151",
-            800: "#1f2937",
-            900: "#111827",
+            100: "#e5e5e5",
+            200: "#d4d4d4",
+            300: "#a3a3a3",
+            500: "#737373",
+            700: "#2b2b2b",
+            800: "#1f1f1f",
+            900: "#141414",
           },
         },
       },
@@ -31,19 +30,18 @@ export default {
     themes: [
       {
         netflix: {
-          primary: "#2563EB",
-          secondary: "#1D4ED8",
-          accent: "#2563EB",
-          neutral: "#f3f4f6",
-          "base-100": "#ffffff",
-          info: "#3b82f6",
-          success: "#16a34a",
+          primary: "#E50914",
+          secondary: "#B20710",
+          accent: "#E50914",
+          neutral: "#1f1f1f",
+          "base-100": "#141414",
+          info: "#60a5fa",
+          success: "#22c55e",
           warning: "#f59e0b",
           error: "#ef4444",
         },
       },
     ],
-    // keep light as default; no forced dark theme
-    darkTheme: null,
+    darkTheme: "netflix",
   },
 };

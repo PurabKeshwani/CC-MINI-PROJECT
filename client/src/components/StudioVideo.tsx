@@ -179,7 +179,7 @@ function StudioVideo({
   }, [handleEditVideo]);
 
   return (
-    <div className="w-full h-full flex flex-col p-10 bg-[#ffffff] overflow-y-auto overflow-x-hidden relative">
+    <div className="w-full h-full flex flex-col p-10 bg-[#141414] overflow-y-auto overflow-x-hidden relative">
       {!processing.ready && (
         <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/60 flex items-center justify-center p-6">
           <div className="w-full max-w-xl rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 p-6 shadow-2xl">

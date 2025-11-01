@@ -4,13 +4,13 @@
 
 @layer base {
   html, body, #root {
-    @apply bg-[color:var(--b1,#ffffff)] text-black min-h-full;
-    background-color: #ffffff; /* light base */
-    color: #111827;
+    @apply bg-[color:var(--b1,#141414)] text-white min-h-full;
+    background-color: #141414; /* netflix black */
+    color: #ffffff;
   }
 
   ::selection {
-    background: #2563EB;
+    background: #E50914;
     color: #ffffff;
   }
 }
@@ -22,16 +22,16 @@
     letter-spacing: -0.02em;
   }
   .btn-primary {
-    @apply bg-[#2563EB] border-0 text-white hover:bg-[#1D4ED8];
+    @apply bg-[#E50914] border-0 text-white hover:bg-[#B20710];
   }
   .btn-secondary {
-    @apply bg-white border border-[#e5e7eb] text-[#111827] hover:bg-[#f9fafb];
+    @apply bg-[#1f1f1f] border border-[#2b2b2b] text-white hover:bg-[#2b2b2b];
   }
   .card-dark {
-    @apply bg-white border border-[#e5e7eb] shadow-big;
+    @apply bg-[#1f1f1f] border border-[#2b2b2b] shadow-big;
   }
   .input-dark, .select-dark, .textarea-dark {
-    @apply bg-white border border-[#e5e7eb] text-[#111827] placeholder-gray-500 focus:outline-none focus:border-[#2563EB];
+    @apply bg-[#1f1f1f] border border-[#2b2b2b] text-white placeholder-gray-400 focus:outline-none focus:border-[#E50914];
   }
 }
 
@@ -48,7 +48,7 @@
 /* Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #9ca3af #f3f4f6;
+  scrollbar-color: #2b2b2b #141414;
 }
 /* Chrome/Safari */
 *::-webkit-scrollbar {
@@ -56,13 +56,13 @@
   height: 10px;
 }
 *::-webkit-scrollbar-track {
-  background: #f3f4f6;
+  background: #141414;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #9ca3af;
+  background-color: #2b2b2b;
   border-radius: 8px;
-  border: 2px solid #f3f4f6;
+  border: 2px solid #141414;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #6b7280;
+  background-color: #3a3a3a;
 }

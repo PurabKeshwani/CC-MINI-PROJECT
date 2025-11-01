@@ -164,22 +164,22 @@ export default function UploadBox() {
       <div
         className={`relative flex items-center justify-center w-[95%] max-w-5xl h-80 rounded-2xl cursor-pointer border-2 border-dashed transition-colors card-dark ${
           isDragOver
-            ? "border-[#2563EB] bg-white"
-            : "border-[#e5e7eb] bg-white hover:border-[#2563EB]"
+            ? "border-[#E50914] bg-[#1f1f1f]"
+            : "border-[#2b2b2b] bg-[#1f1f1f] hover:border-[#E50914]"
         }`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onChange={handleFileChange}
       >
-        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-transparent to-black/5" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent via-transparent to-black/10" />
         <label
           htmlFor="dropzone-file"
           className="flex flex-col items-center justify-center w-full h-full cursor-pointer"
         >
           <div className="flex flex-col items-center justify-center pt-5 pb-6">
             <svg
-              className="w-10 h-10 mb-4 text-[#2563EB]"
+              className="w-10 h-10 mb-4 text-[#E50914]"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -196,19 +196,19 @@ export default function UploadBox() {
             <p className="mb-2 text-sm text-gray-300">
               <span className="font-semibold text-white">Click to upload</span> or drag and drop a video
             </p>
-            <div className="flex items-center gap-3 text-xs text-gray-500">
-              <span className="px-2 py-1 rounded bg-gray-100 border border-[#e5e7eb]">MP4</span>
+            <div className="flex items-center gap-3 text-xs text-gray-400">
+              <span className="px-2 py-1 rounded bg-black/40 border border-[#2b2b2b]">MP4</span>
               <span>Max size 50MB</span>
             </div>
             {file && (
               <>
-                <div className="mt-4 px-3 py-2 rounded-lg bg-gray-100 border border-[#e5e7eb]">
-                  <p className="text-[#111827] text-sm md:text-base font-semibold truncate max-w-[70vw] md:max-w-[40vw]">{file.name}</p>
-                  <p className="text-gray-600 text-xs mt-1">{size}</p>
+                <div className="mt-4 px-3 py-2 rounded-lg bg-black/30 border border-[#2b2b2b]">
+                  <p className="text-white text-sm md:text-base font-semibold truncate max-w-[70vw] md:max-w-[40vw]">{file.name}</p>
+                  <p className="text-gray-400 text-xs mt-1">{size}</p>
                 </div>
                 {loading && (
-                  <div className="w-[220px] h-2 mt-4 bg-[#e5e7eb] rounded-full overflow-hidden">
-                    <div className="h-full w-1/2 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] animate-pulse" />
+                  <div className="w-[220px] h-2 mt-4 bg-[#2b2b2b] rounded-full overflow-hidden">
+                    <div className="h-full w-1/2 bg-gradient-to-r from-[#E50914] to-[#B20710] animate-pulse" />
                   </div>
                 )}
               </>

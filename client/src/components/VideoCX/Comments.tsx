@@ -119,7 +119,7 @@ export default function Comments({ video }: { video: Video }) {
                       onClick={() => handleDleteComment(video.id, comment.id)}
                       className="rounded-xl rounded-tr-none overflow-hidden"
                     >
-                      <div className="flex flex-col items-start px-3 py-2 hover:bg-[#2563EB] hover:text-white">
+                      <div className="flex flex-col items-start px-3 py-2 hover:bg-red-600 hover:text-black">
                         Delete
                       </div>
                     </div>
