@@ -20,6 +20,29 @@ app.use(
       return callback(new Error(`CORS: Origin not allowed: ${origin}`));
     },
     credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    exposedHeaders: ["Set-Cookie"],
+  })
+);
+
+// Explicitly handle preflight requests with the same CORS rules
+app.options(
+  "*",
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+      if (CLIENT_URLS.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS: Origin not allowed: ${origin}`));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    exposedHeaders: ["Set-Cookie"],
   })
 );
 
