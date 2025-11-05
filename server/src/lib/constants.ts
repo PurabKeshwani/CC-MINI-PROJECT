@@ -3,6 +3,10 @@ dotenv.config();
 
 export const PORT = process.env.PORT || 3000;
 export const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+export const CLIENT_URLS = (process.env.CLIENT_URLS || CLIENT_URL)
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
 export const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379";
 
 // AWS credentials

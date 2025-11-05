@@ -1,6 +1,6 @@
 import express from "express";
 import routes from "./routes";
-import { CLIENT_URL, PORT } from "./lib/constants";
+import { CLIENT_URLS, PORT } from "./lib/constants";
 import cors from "cors";
 import prisma from "./lib/prisma";
 import { redisClient } from "./lib/redis";
@@ -10,7 +10,15 @@ const app = express();
 
 app.use(
   cors({
-    origin: CLIENT_URL,
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+      if (CLIENT_URLS.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS: Origin not allowed: ${origin}`));
+    },
     credentials: true,
   })
 );
