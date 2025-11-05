@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
+import API_URL from "../config/apiConfig";
 import { validateComment, validateVideo, Video } from "../types/video";
 
 export async function getVideo(id: string) {
-  const res = await axios.get(BASE_URL + "/api/video/" + id, {
+  const res = await axios.get(API_URL + "/api/video/" + id, {
     withCredentials: true,
   });
   const vidoe = validateVideo.safeParse(res.data.video);
@@ -15,7 +15,7 @@ export async function getVideo(id: string) {
 }
 
 export async function getVideos() {
-  const res = await axios.get(BASE_URL + "/api/video", {
+  const res = await axios.get(API_URL + "/api/video", {
     withCredentials: true,
   });
   const videosResponse: Video[] = [];
@@ -36,21 +36,21 @@ export async function uploadFIle(file: File) {
   const formdata = new FormData();
   formdata.append("video", file, file.name);
   formdata.append("fileName", file.name);
-  const res = await axios.post(BASE_URL + "/api/video", formdata, {
+  const res = await axios.post(API_URL + "/api/video", formdata, {
     withCredentials: true,
   });
   return res.data;
 }
 
 export async function updateVideo(id: string, video: Partial<Video>) {
-  const res = await axios.patch(BASE_URL + "/api/video/" + id, video, {
+  const res = await axios.patch(API_URL + "/api/video/" + id, video, {
     withCredentials: true,
   });
   return res.data;
 }
 
 export async function deleteVideo(id: string) {
-  const res = await axios.delete(BASE_URL + "/api/video/" + id, {
+  const res = await axios.delete(API_URL + "/api/video/" + id, {
     withCredentials: true,
   });
   return res.data;
@@ -58,7 +58,7 @@ export async function deleteVideo(id: string) {
 
 export async function addComment(id: string, content: string) {
   const res = await axios.post(
-    BASE_URL + "/api/video/" + id + "/comments",
+    API_URL + "/api/video/" + id + "/comments",
     { content },
     {
       withCredentials: true,
@@ -74,7 +74,7 @@ export async function addComment(id: string, content: string) {
 
 export async function deleteComment(videoID: string, commentID: number) {
   const res = await axios.delete(
-    BASE_URL + "/api/video/" + videoID + "/comments/" + commentID,
+    API_URL + "/api/video/" + videoID + "/comments/" + commentID,
     {
       withCredentials: true,
     }
@@ -83,7 +83,7 @@ export async function deleteComment(videoID: string, commentID: number) {
 }
 
 export async function getVideoStatus(id: string) {
-  const res = await axios.get(BASE_URL + "/api/video/" + id + "/status", {
+  const res = await axios.get(API_URL + "/api/video/" + id + "/status", {
     withCredentials: true,
   });
   return res.data as { ready: boolean; percent: number; objectCount: number; message: string };

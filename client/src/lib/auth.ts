@@ -1,9 +1,9 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
+import API_URL from "../config/apiConfig";
 
 export async function handleLoginUser(username: string, password: string) {
   const response = await axios.post(
-    `${BASE_URL}/api/auth/login`,
+    `${API_URL}/api/auth/login`,
     {
       username,
       password,
@@ -20,7 +20,7 @@ export async function handleRegisterUser(
   password: string,
   email: string
 ) {
-  const response = await axios.post(`${BASE_URL}/api/auth/register`, {
+  const response = await axios.post(`${API_URL}/api/auth/register`, {
     username,
     password,
     email,

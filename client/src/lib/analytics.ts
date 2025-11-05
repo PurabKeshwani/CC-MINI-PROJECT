@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "./constants";
+import API_URL from "../config/apiConfig";
 
 export interface VideoMetrics {
   videoId: string;
@@ -39,7 +39,7 @@ export interface TrendingVideo {
 export async function getVideoAnalytics(videoId: string): Promise<VideoMetrics | null> {
   try {
     console.log(`🔍 Fetching analytics for video: ${videoId}`);
-    const res = await axios.get(`${BASE_URL}/api/analytics/video/${videoId}`, {
+    const res = await axios.get(`${API_URL}/api/analytics/video/${videoId}`, {
       withCredentials: true,
       timeout: 5000 // 5 second timeout
     });
@@ -54,7 +54,7 @@ export async function getVideoAnalytics(videoId: string): Promise<VideoMetrics |
 // Get user analytics
 export async function getUserAnalytics(): Promise<UserEngagement[] | null> {
   try {
-    const res = await axios.get(`${BASE_URL}/api/analytics/user`, {
+    const res = await axios.get(`${API_URL}/api/analytics/user`, {
       withCredentials: true,
     });
     return res.data;
@@ -67,7 +67,7 @@ export async function getUserAnalytics(): Promise<UserEngagement[] | null> {
 // Get trending videos
 export async function getTrendingVideos(): Promise<TrendingVideo[] | null> {
   try {
-    const res = await axios.get(`${BASE_URL}/api/analytics/trending`, {
+    const res = await axios.get(`${API_URL}/api/analytics/trending`, {
       withCredentials: true,
     });
     return res.data.trendingVideos || [];
@@ -81,7 +81,7 @@ export async function getTrendingVideos(): Promise<TrendingVideo[] | null> {
 export async function trackVideoView(videoId: string, watchTime: number): Promise<boolean> {
   try {
     console.log(`🔍 Tracking view for video: ${videoId}, watchTime: ${watchTime}`);
-    const res = await axios.post(`${BASE_URL}/api/analytics/track/view/${videoId}`, 
+    const res = await axios.post(`${API_URL}/api/analytics/track/view/${videoId}`, 
       { watchTime }, 
       { 
         withCredentials: true,
@@ -103,7 +103,7 @@ export async function trackVideoInteraction(
 ): Promise<boolean> {
   try {
     console.log(`🔍 Tracking ${interactionType} for video: ${videoId}`);
-    const res = await axios.post(`${BASE_URL}/api/analytics/track/interaction/${videoId}`, 
+    const res = await axios.post(`${API_URL}/api/analytics/track/interaction/${videoId}`, 
       { type: interactionType }, 
       { 
         withCredentials: true,
